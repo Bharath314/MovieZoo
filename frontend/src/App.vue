@@ -1,11 +1,9 @@
-<script>
-  setup
+<script setup>
+  import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-    <navbar>
-      
-    </navbar>
+  Hello
 </template>
 
 
