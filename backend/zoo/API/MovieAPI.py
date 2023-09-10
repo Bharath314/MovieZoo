@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-from pprint import pprint
 
 from flask import current_app, request
 from flask_restful import Resource

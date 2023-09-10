@@ -1,8 +1,7 @@
-from pprint import pprint
 from flask import request
 from zoo import db
-from zoo.models import User, Venue
-from flask_restful import Resource, reqparse, marshal_with, fields
+from zoo.models import Venue
+from flask_restful import Resource
 from zoo.API.schemas import VenueSchema
 
 class VenueAPI(Resource):

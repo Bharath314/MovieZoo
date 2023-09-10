@@ -3,7 +3,9 @@
 </script>
 
 <template>
-    <button @click="count++">{{ count }}</button>
+    <navbar>
+      
+    </navbar>
 </template>
 
 
