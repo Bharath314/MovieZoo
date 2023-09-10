@@ -56,16 +56,15 @@ class ShowSchema(Schema):
     
     def with_context(self, **kwargs):
         contextual_schema = ShowSchema()
-        print(kwargs)
         for key in kwargs:
             contextual_schema.context[key] = kwargs[key]
         return contextual_schema
     
 class BookingSchema(Schema):
     id = fields.Int(required=True)
-    user_id = db.Int(required=True)
-    show_id = db.Int(required=True)
-    ticket_count = db.Int(required=True)
+    user_id = fields.Int(required=True)
+    show_id = fields.Int(required=True)
+    ticket_count = fields.Int(required=True)
 
     @validates("id")
     def validate_id(self, value):

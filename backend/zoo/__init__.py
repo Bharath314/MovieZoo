@@ -21,6 +21,7 @@ db.init_app(app)
 from zoo.API.VenueAPI import VenueAPI
 from zoo.API.MovieAPI import MovieAPI
 from zoo.API.ShowAPI import ShowAPI
+from zoo.API.BookingAPI import BookingAPI
 # from zoo.API.UserAPI import LoginResource, LogoutResource
 
 # api.add_resource(UserAPI, '/api/user')
@@ -28,8 +29,6 @@ from zoo.API.ShowAPI import ShowAPI
 # api.add_resource(LogoutResource, '/api/logout')
 api.add_resource(VenueAPI, '/api/venue')
 api.add_resource(MovieAPI, '/api/movie')
-print("this works ")
 api.add_resource(ShowAPI, '/api/show')
-print("this works too")
-
+api.add_resource(BookingAPI, '/api/booking')
 

@@ -108,7 +108,7 @@ class MovieAPI(Resource):
             os.remove(movie.poster)
         db.session.delete(movie)
         db.session.commit()
-        return 204
+        return None, 204
 
         
         

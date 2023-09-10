@@ -54,4 +54,4 @@ class ShowAPI(Resource):
         show = db.one_or_404(db.select(Show).filter_by(id=args["id"]))
         db.session.delete(show)
         db.session.commit()
-        return 204
+        return None, 204

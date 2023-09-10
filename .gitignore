@@ -10,3 +10,8 @@ backend/zoo/API/__pycache__/ShowAPI.cpython-311.pyc
 backend/zoo/API/__pycache__/UserAPI.cpython-311.pyc
 backend/zoo/API/__pycache__/VenueAPI.cpython-311.pyc
 backend/zoo/static/posters/Saamy 1.jpg
+
+backend/zoo/API/__pycache__/BookingAPI.cpython-311.pyc
+backend/zoo/API/__pycache__/MovieAPI.cpython-311.pyc
+backend/zoo/API/__pycache__/schemas.cpython-311.pyc
+backend/zoo/__pycache__/__init__.cpython-311.pyc

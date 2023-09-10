@@ -55,4 +55,4 @@ class VenueAPI(Resource):
         venue = db.one_or_404(db.select(Venue).filter_by(id=args['id']))
         db.session.delete(venue)
         db.session.commit()
-        return 204
+        return None, 204
