@@ -1,8 +1,11 @@
-from flask import Flask, request, url_for
+import os
+
+from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
-import os
+from flask_security import Security, SQLAlchemyUserDatastore, auth_required, hash_password
+from flask_security.models import fsqla_v3 as fsqla
 
 app = Flask(__name__)
 
@@ -11,6 +14,7 @@ app.config['SECURITY_PASSWORD_SALT'] = "317253998663595341291509795129662632201"
 app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
 app.config["SESSION_COOKIE_SAMESITE"] = "strict"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['WTF_CSRF_ENABLED'] = False
 
 app.config['POSTER_FOLDER'] = os.path.join('zoo', 'static', 'posters')
 

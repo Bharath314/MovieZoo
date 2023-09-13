@@ -17,6 +17,11 @@ import { RouterLink, RouterView } from 'vue-router'
               <RouterLink to="/movies" class="nav-link">Movies</RouterLink>
             </li>
           </ul>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <RouterLink to="/login" class="btn btn-primary">Login</RouterLink>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>

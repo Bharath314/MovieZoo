@@ -7,7 +7,7 @@ const object = { id: ref(1) };
 
 <template>
     <main>
-        Welcome to MovieZoo!
-        <button>{{  }}</button>
+        Welcome to MovieZoo! 
+        <button @click="count++">{{ count }}</button>
     </main>
 </template>
