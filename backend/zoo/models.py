@@ -60,7 +60,6 @@ class Show(db.Model):
     venue = db.relationship("Venue", backref=db.backref("shows", lazy="dynamic", cascade="all, delete"))
     tickets_booked = db.Column(db.Integer, default=0, nullable=False)
     price = db.Column(db.Integer, nullable=False)
-
     def __repr__(self):
         return f"Show('{self.id}, '{self.movie_id}', '{self.venue_id}', '{self.tickets_booked}')"
 

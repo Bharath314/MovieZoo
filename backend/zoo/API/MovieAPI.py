@@ -15,33 +15,29 @@ def save_poster(movie_name, file):
     file.save(file_location)
     return file_location
 
-class MovieAPI(Resource):
-
+class MovieListAPI(Resource):
     def __init__(self) -> None:
         super().__init__()
         self.schema = MovieSchema()
 
     def get(self):
-        args = request.form
-        errors = self.schema.validate(args, partial=("name", "poster", "release_date"))
-        if errors:
-            return {"errors": errors}, 400
-        movie = db.one_or_404(db.select(Movie).filter_by(id=args["id"]))
-        serialized_movie = self.schema.dump(movie)
-        return serialized_movie, 200
-
+        movies = db.session.execute(db.select(Movie).order_by(Movie.name)).scalars()
+        serialized_movies = []
+        for movie in movies:
+            serialized_movies.append(self.schema.dump(movie))
+        return serialized_movies, 200
+    
     def post(self):
         args = request.form
         print(args)
-        errors = self.schema.validate(args, partial=("id", "poster"))
+        errors = self.schema.validate(args, partial=("id", "poster", "release_date"))
         if errors:
             return {"errors": errors}, 400
         movie = Movie()
         for attr in args:
             if attr == "release_date":
-                date_format = "%Y-%m-%dT%H:%M:%S"
+                date_format = "%Y-%m-%d"
                 release_date = datetime.strptime(args["release_date"], date_format)
-                print(type(release_date))
                 setattr(movie, 'release_date', release_date)
             else:
                 setattr(movie, attr, args[attr])
@@ -53,6 +49,17 @@ class MovieAPI(Resource):
         db.session.commit()
         serialized_movie = self.schema.dump(movie)
         return serialized_movie, 201
+
+class MovieAPI(Resource):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.schema = MovieSchema()
+
+    def get(self, id):
+        movie = db.one_or_404(db.select(Movie).filter_by(id=id))
+        serialized_movie = self.schema.dump(movie)
+        return serialized_movie, 200
     
     def patch(self):
         args = request.form
@@ -62,7 +69,6 @@ class MovieAPI(Resource):
         movie = db.one_or_404(db.select(Movie).filter_by(id=args["id"]))
         if "poster" in request.files:
             poster = request.files["poster"]
-            print("marco")
             if "name" in args:
                 if movie.poster == os.path.join(current_app.config["POSTER_FOLDER"], "default.png"):
                     poster_location = save_poster(args["name"], poster)
@@ -70,16 +76,13 @@ class MovieAPI(Resource):
                 else:
                     os.remove(movie.poster)
                     poster_location = save_poster(args["name"], poster)
-                    print(poster_location)
                     setattr(movie, "poster", poster_location)
             elif movie.poster == os.path.join(current_app.config["POSTER_FOLDER"], "default.png"):
                 poster_location = save_poster(movie.name, poster)
-                print(poster_location)
                 setattr(movie, "poster", poster_location)
             else:
                 os.remove(movie.poster)
                 poster_location = save_poster(movie.name, poster)
-                print(poster_location)
                 setattr(movie, "poster", poster_location)
         elif "name" in args and movie.poster != os.path.join(current_app.config["POSTER_FOLDER"], "default.png"):
             _, file_extn = os.path.splitext(movie.poster)
@@ -90,7 +93,6 @@ class MovieAPI(Resource):
             if attr == "release_date":
                 date_format = "%Y-%m-%dT%H:%M:%S"
                 release_date = datetime.strptime(args["release_date"], date_format)
-                print(type(release_date))
                 setattr(movie, 'release_date', release_date)
             else:
                 setattr(movie, attr, args[attr])
@@ -99,7 +101,7 @@ class MovieAPI(Resource):
         return serialized_movie, 200
 
     def delete(self):
-        args = request.form
+        args = request.get_json()
         errors = self.schema.validate(args, partial=('name',))
         if errors:
             return {'errors': errors}, 400
@@ -109,7 +111,3 @@ class MovieAPI(Resource):
         db.session.delete(movie)
         db.session.commit()
         return None, 204
-
-        
-        
-

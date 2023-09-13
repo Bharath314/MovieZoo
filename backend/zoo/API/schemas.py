@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, validates, ValidationError
+from marshmallow import Schema, fields, validates, ValidationError, pre_load
 from zoo import db
 from zoo.models import Show, Venue, Movie
 
@@ -21,14 +21,22 @@ class VenueSchema(Schema):
 class MovieSchema(Schema):
     id = fields.Int(required=True)
     name = fields.Str(required=True)
-    release_date = fields.DateTime()
+    release_date = fields.Date(load_default=None, allow_none=True)
     poster = fields.Str(load_only=True)
+
+    @pre_load(pass_many=False)
+    def string_to_none(self, data, many, **kwargs):
+        modified_data = {}
+        turn_to_none = lambda x: None if x == '' else x
+        for k, v in data.items():
+            modified_data[k] = turn_to_none(v)
+        return modified_data
 
     @validates("id")
     def validate_id(self, value):
         if value <= 0:
             raise ValidationError("ID must be greater than 0.")
-
+    
 class ShowSchema(Schema):
     id = fields.Int(required=True)
     movie_id = fields.Int(required=True)
