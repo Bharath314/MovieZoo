@@ -1,17 +1,19 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import { useUserStore } from '../stores/userStore';
 import axios from 'axios';
 
 const router = useRouter();
-const username = ref('');
-const password = ref('');
+const user_store = useUserStore();
+const email = ref();
+const password = ref();
 
 // console.log(formData)
 
 function login() {
     const formData = {
-        'email': username.value,
+        'email': email.value,
         'password': password.value
     }
     axios.post(
@@ -25,6 +27,7 @@ function login() {
     )
         .then(function (response) {
             localStorage.auth_token = response.data.response.user.authentication_token;
+            user_store.login('test@me.com');
             router.push({ name: 'home', });
         });
 
@@ -35,8 +38,8 @@ function login() {
     <div>
         <form @submit.prevent="login">
 
-            <label for="username">Username:</label>
-            <input v-model="username" type="text" id="username" required>
+            <label for="email">Email:</label>
+            <input v-model="email" type="text" id="email" required>
             <label for="password">Password:</label>
             <input v-model="password" type="password" id="password" required>
 
