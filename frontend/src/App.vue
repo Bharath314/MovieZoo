@@ -22,7 +22,7 @@ user_store.setState();
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <RouterLink v-if="!user_store.isLoggedIn" to="/login" class="btn btn-primary">Login</RouterLink>
-              <button @click="user_store.logout()" v-else href="#" class="btn btn-secondary">Logout</button>
+              <button v-else @click="user_store.logout()" class="btn btn-secondary">Logout</button>
             </li>
           </ul>
         </div>

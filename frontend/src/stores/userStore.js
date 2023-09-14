@@ -8,32 +8,36 @@ export const useUserStore = defineStore('user', () => {
     const email = ref();
 
     function setState() {
-        if (localStorage.getItem('user')) {
-            const user = JSON.parse(localStorage.getItem('user'))
-            isLoggedIn.value = user.isLoggedIn;
-            //add additional validation to check for admin auth
-            isAdmin.value = user.isAdmin;
-            email.value = user.email;
+        const auth_token = localStorage.getItem('auth_token')
+        if (auth_token) {
+            fetchUser(auth_token);
         }
-        else logout();
+
     }
 
-    function login(data) {
-        isLoggedIn.value = true;
-        email.value = data;
-        isAdmin.value = true;
-        localStorage.setItem("user", JSON.stringify({"isLoggedIn":isLoggedIn.value, "isAdmin": isAdmin.value, "email": email.value}));
-        console.log("set");
+    function fetchUser(data) {  
+        axios.get("http://127.0.0.1:5000/api/current-user", {
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authentication-Token': data,
+            }
+        })
+        .then(function (response) {
+            console.log(response)
+            isLoggedIn.value = true;
+            email.value = response.data.email;
+            isAdmin.value = (response.data.role === 'admin') ? true : false;
+            console.log("set");
+        })
     }
 
-    function logout(data) {
+    function logout() {
         isLoggedIn.value = false;
         email.value = null;
         isAdmin.value = false;
-        localStorage.removeItem('user');
         localStorage.removeItem('auth_token');
     }
 
-    return {isLoggedIn, isAdmin, email, login, logout, setState};
+    return {isLoggedIn, isAdmin, email, logout, fetchUser, setState};
 })
 

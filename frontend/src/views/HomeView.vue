@@ -11,6 +11,6 @@ const user_store = useUserStore();
     <main>
         Welcome to MovieZoo! 
         <button @click="count++">{{ count }}</button>
-        <div v-if="user_store.isLoggedIn">It's working Priya!</div>
+        <div v-if="user_store.isLoggedIn">Welcome {{ user_store.email }}</div>
     </main>
 </template>

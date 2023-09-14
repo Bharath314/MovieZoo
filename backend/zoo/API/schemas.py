@@ -78,3 +78,8 @@ class BookingSchema(Schema):
     def validate_id(self, value):
         if value <= 0:
             raise ValidationError("ID must be greater than 0.")
+        
+class UserSchema(Schema):
+    email = fields.Email(required=True)
+    role =fields.Str(required=True)
+    

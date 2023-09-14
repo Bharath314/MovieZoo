@@ -15,8 +15,8 @@ app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
 app.config["SESSION_COOKIE_SAMESITE"] = "strict"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['WTF_CSRF_ENABLED'] = False
-
 app.config['POSTER_FOLDER'] = os.path.join('zoo', 'static', 'posters')
+app.config['SECURITY_REGISTERABLE'] = True
 
 
 api = Api(app)
@@ -28,11 +28,9 @@ from zoo.API.VenueAPI import VenueAPI
 from zoo.API.MovieAPI import MovieAPI, MovieListAPI
 from zoo.API.ShowAPI import ShowAPI
 from zoo.API.BookingAPI import BookingAPI
-# from zoo.API.UserAPI import LoginResource, LogoutResource
+from zoo.API.UserAPI import CurrentUserAPI
 
-# api.add_resource(UserAPI, '/api/user')
-# api.add_resource(LoginResource, '/api/login')
-# api.add_resource(LogoutResource, '/api/logout')
+api.add_resource(CurrentUserAPI, '/api/current-user')
 api.add_resource(VenueAPI, '/api/venue')
 api.add_resource(MovieListAPI, '/api/movies')
 api.add_resource(MovieAPI, '/api/movies/<int:id>')

@@ -12,12 +12,3 @@ app.use(router)
 app.use(pinia)
 
 app.mount('#app')
-
-// watch(
-//     pinia.state,
-//     (state) => {
-//         localStorage.setItem("user", JSON.stringify({"isLoggedIn":state.isLoggedIn.value, "isAdmin": state.isAdmin.value, "email": state.email.value}));
-//         console.log("set");
-//     },
-//     { deep: true }
-// );

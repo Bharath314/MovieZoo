@@ -9,8 +9,6 @@ const user_store = useUserStore();
 const email = ref();
 const password = ref();
 
-// console.log(formData)
-
 function login() {
     const formData = {
         'email': email.value,
@@ -25,11 +23,11 @@ function login() {
             }
         }
     )
-        .then(function (response) {
-            localStorage.auth_token = response.data.response.user.authentication_token;
-            user_store.login('test@me.com');
-            router.push({ name: 'home', });
-        });
+    .then(function (response) {
+        localStorage.auth_token = response.data.response.user.authentication_token;
+        user_store.fetchUser(localStorage.auth_token);
+        router.push({ name: 'home', });
+    });
 
 }
 </script>
