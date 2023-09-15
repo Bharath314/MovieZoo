@@ -12,7 +12,7 @@ console.log(data)
 <template>
     <li v-for="movie in data">
         {{ movie.name }}
-        <a href="#">Update</a>
+        <a :href="/movies/ + movie.id">Update</a>
         <a href="#">Delete</a>
     </li>
 </template>

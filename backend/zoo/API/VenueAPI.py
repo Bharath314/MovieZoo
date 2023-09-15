@@ -10,7 +10,7 @@ class VenueAPI(Resource):
         self.schema = VenueSchema()
 
     def post(self):
-        args = request.form
+        args = request.get_json()
         errors = self.schema.validate(args, partial=('id',))
         if errors:
             return {'errors': errors}, 400 

@@ -1,4 +1,5 @@
 import os
+import uuid
 from datetime import datetime
 
 from flask import current_app, request
@@ -8,10 +9,13 @@ from zoo.API.schemas import MovieSchema
 from zoo.models import Movie
 
 
-def save_poster(movie_name, file):
+def save_poster(file):
     _, file_extn = os.path.splitext(file.filename)
-    filename = movie_name + file_extn
+    filename = str(uuid.uuid4()) + file_extn
     file_location = os.path.join(current_app.config["POSTER_FOLDER"], filename)
+    while os.path.exists(file_location):
+        filename = str(uuid.uuid4()) + file_extn
+        file_location = os.path.join(current_app.config["POSTER_FOLDER"], filename)
     file.save(file_location)
     return file_location
 
@@ -43,7 +47,7 @@ class MovieListAPI(Resource):
                 setattr(movie, attr, args[attr])
         if "poster" in request.files:
             poster = request.files["poster"]
-            poster_location = save_poster(args["name"], poster)
+            poster_location = save_poster(poster)
             setattr(movie, "poster", poster_location)
         db.session.add(movie)
         db.session.commit()

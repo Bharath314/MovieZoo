@@ -1,6 +1,9 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import axios from 'axios';
+
+const router = useRouter();
 
 export const useUserStore = defineStore('user', () => {
     const isLoggedIn = ref(false);
@@ -36,6 +39,7 @@ export const useUserStore = defineStore('user', () => {
         email.value = null;
         isAdmin.value = false;
         localStorage.removeItem('auth_token');
+        router.push({ name: 'home', })
     }
 
     return {isLoggedIn, isAdmin, email, logout, fetchUser, setState};

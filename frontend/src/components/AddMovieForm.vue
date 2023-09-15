@@ -1,9 +1,12 @@
 <script setup>
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { ref } from 'vue';
 
+const router = useRouter();
 const name = ref();
 const release_date = ref();
+
 
 async function submitForm() {
      const form = document.getElementById('newMovieForm');
@@ -29,6 +32,8 @@ async function submitForm() {
                }
           }
      );
+
+     router.push({ name: 'movies', });
 
 }
 </script>

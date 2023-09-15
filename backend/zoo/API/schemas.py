@@ -47,7 +47,7 @@ class ShowSchema(Schema):
     @validates("id")
     def validate_id(self, value):
         if value <= 0:
-            raise ValidationError("ID must be greater than 0.")
+            raise ValidationError("ID must be greater than 0")
     
     @validates("tickets_booked")
     def validate_tickets_booked(self, value):
@@ -56,11 +56,11 @@ class ShowSchema(Schema):
         if venue_id:
             venue = db.one_or_404(db.select(Venue).filter_by(id=venue_id))
             if value > venue.capacity:
-                raise ValidationError("Venue capacity exceeded.")
+                raise ValidationError("Venue capacity exceeded")
         elif show_id:
             show = db.one_or_404(db.select(Show).filter_by(id=show_id))
             if value > show.venue.capacity:
-                raise ValidationError("Venue capacity exceeded.")
+                raise ValidationError("Venue capacity exceeded")
     
     def with_context(self, **kwargs):
         contextual_schema = ShowSchema()
@@ -77,9 +77,27 @@ class BookingSchema(Schema):
     @validates("id")
     def validate_id(self, value):
         if value <= 0:
-            raise ValidationError("ID must be greater than 0.")
+            raise ValidationError("ID must be greater than 0")
         
 class UserSchema(Schema):
     email = fields.Email(required=True)
-    role =fields.Str(required=True)
+    role = fields.Str(required=True)
+    password = fields.Str(load_only=True)
+    confirm_password = fields.Str(load_only=True)
+
+    def with_context(self, **kwargs):
+        contextual_schema = UserSchema()
+        for key in kwargs:
+            contextual_schema.context[key] = kwargs[key]
+        return contextual_schema
+
+    @validates("confirm_password")
+    def validate_confirm_password(self, value):
+        print(value)
+        password = self.context.get('password')
+        if password != value:
+            print("happened")
+            raise ValidationError("Confirm password doesn't match password")
+
+    #add password validation logic
     

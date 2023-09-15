@@ -6,42 +6,39 @@ import axios from 'axios';
 
 const router = useRouter();
 const user_store = useUserStore();
+
 const email = ref();
 const password = ref();
+const confirm_password = ref();
 
-function login() {
-  const formData = {
-    'email': email.value,
-    'password': password.value,
-  }
-  axios.post(
-    "http://127.0.0.1:5000/login?include_auth_token",
-    formData,
-    {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+function register() {
+    const formData = {
+        'email': email.value,
+        'password': password.value,
+        'confirm_password': confirm_password.value,
     }
-  )
+    axios.post(
+        "http://127.0.0.1:5000/register",
+        formData,
+    )
     .then(function(response) {
-      localStorage.auth_token = response.data.response.user.authentication_token;
-      user_store.fetchUser(localStorage.auth_token);
-      router.push({ name: 'home', });
-    });
-
+        router.push('login')
+    })
 }
 </script>
 
 <template>
 <div>
-  <form @submit.prevent="login">
+  <form @submit.prevent="register">
     
     <label for="email">Email:</label>
     <input v-model="email" type="text" id="email" required>
     <label for="password">Password:</label>
     <input v-model="password" type="password" id="password" required>
+    <label for="confirm_password">Confirm Password:</label>
+    <input v-model="confirm_password" type="password" id="confirm_password" required>
 
-    <button type="submit">Login</button>
+    <button type="submit">Register</button>
   </form>
 </div>
 </template>

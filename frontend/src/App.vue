@@ -1,10 +1,16 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { useUserStore } from './stores/userStore';
 import AdminNav from './components/AdminNav.vue';
 
 const user_store = useUserStore();
+const router = useRouter();
+
 user_store.setState();
+
+// if (!user_store.isLoggedIn) {
+//   router.push({ 'name': 'home'})
+// }
 
 </script>
 
@@ -22,6 +28,7 @@ user_store.setState();
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <RouterLink v-if="!user_store.isLoggedIn" to="/login" class="btn btn-primary">Login</RouterLink>
+              <a v-if="!user_store.isLoggedIn" href="/register" class="nav-item">Sign Up</a>
               <button v-else @click="user_store.logout()" class="btn btn-secondary">Logout</button>
             </li>
           </ul>
