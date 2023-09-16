@@ -24,7 +24,7 @@ db = SQLAlchemy()
 db.init_app(app)
 CORS(app)
 
-from zoo.API.VenueAPI import VenueAPI
+from zoo.API.VenueAPI import VenueAPI, VenueListAPI
 from zoo.API.MovieAPI import MovieAPI, MovieListAPI
 from zoo.API.ShowAPI import ShowAPI
 from zoo.API.BookingAPI import BookingAPI
@@ -32,7 +32,8 @@ from zoo.API.UserAPI import CurrentUserAPI, SignUpAPI
 
 api.add_resource(SignUpAPI, '/register')
 api.add_resource(CurrentUserAPI, '/api/current-user')
-api.add_resource(VenueAPI, '/api/venue')
+api.add_resource(VenueListAPI, '/api/venues')
+api.add_resource(VenueAPI, '/api/venues/<int:id>')
 api.add_resource(MovieListAPI, '/api/movies')
 api.add_resource(MovieAPI, '/api/movies/<int:id>')
 api.add_resource(ShowAPI, '/api/show')
