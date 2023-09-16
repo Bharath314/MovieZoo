@@ -6,7 +6,7 @@ import AdminNav from './components/AdminNav.vue';
 const user_store = useUserStore();
 const router = useRouter();
 
-user_store.setState();
+if (!user_store.isLoggedIn) user_store.setState();
 
 // if (!user_store.isLoggedIn) {
 //   router.push({ 'name': 'home'})
@@ -36,8 +36,9 @@ user_store.setState();
       </div>
     </nav>
   </header>
-
-  <RouterView />
+  <Suspense>
+    <RouterView />
+  </Suspense>
 </template>
 
 

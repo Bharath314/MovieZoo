@@ -65,37 +65,18 @@ class MovieAPI(Resource):
         serialized_movie = self.schema.dump(movie)
         return serialized_movie, 200
     
-    def patch(self):
+    def patch(self, id):
         args = request.form
-        errors = self.schema.validate(args, partial=('name',))
+        errors = self.schema.validate(args, partial=('id', 'name',))
         if errors:
             return {'errors': errors}, 400
-        movie = db.one_or_404(db.select(Movie).filter_by(id=args["id"]))
+        movie = db.one_or_404(db.select(Movie).filter_by(id=id))
         if "poster" in request.files:
-            poster = request.files["poster"]
-            if "name" in args:
-                if movie.poster == os.path.join(current_app.config["POSTER_FOLDER"], "default.png"):
-                    poster_location = save_poster(args["name"], poster)
-                    setattr(movie, "poster", poster_location)
-                else:
-                    os.remove(movie.poster)
-                    poster_location = save_poster(args["name"], poster)
-                    setattr(movie, "poster", poster_location)
-            elif movie.poster == os.path.join(current_app.config["POSTER_FOLDER"], "default.png"):
-                poster_location = save_poster(movie.name, poster)
-                setattr(movie, "poster", poster_location)
-            else:
-                os.remove(movie.poster)
-                poster_location = save_poster(movie.name, poster)
-                setattr(movie, "poster", poster_location)
-        elif "name" in args and movie.poster != os.path.join(current_app.config["POSTER_FOLDER"], "default.png"):
-            _, file_extn = os.path.splitext(movie.poster)
-            renamed_poster_loc = os.path.join(current_app.config["POSTER_FOLDER"], args['name'] + file_extn)
-            os.rename(movie.poster, renamed_poster_loc)
-            movie.poster = renamed_poster_loc
+            os.remove(movie.poster)
+            movie.poster = save_poster(request.files["poster"])
         for attr in args:
             if attr == "release_date":
-                date_format = "%Y-%m-%dT%H:%M:%S"
+                date_format = "%Y-%m-%d"
                 release_date = datetime.strptime(args["release_date"], date_format)
                 setattr(movie, 'release_date', release_date)
             else:
@@ -104,12 +85,8 @@ class MovieAPI(Resource):
         serialized_movie = self.schema.dump(movie)
         return serialized_movie, 200
 
-    def delete(self):
-        args = request.get_json()
-        errors = self.schema.validate(args, partial=('name',))
-        if errors:
-            return {'errors': errors}, 400
-        movie = db.one_or_404(db.select(Movie).filter_by(id=args["id"]))
+    def delete(self, id):
+        movie = db.one_or_404(db.select(Movie).filter_by(id=id))
         if movie.poster != os.path.join(current_app.config["POSTER_FOLDER"], "default.png"):
             os.remove(movie.poster)
         db.session.delete(movie)
