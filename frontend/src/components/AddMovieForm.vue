@@ -6,6 +6,7 @@ import { ref } from 'vue';
 const router = useRouter();
 const name = ref();
 const release_date = ref();
+const auth_token = localStorage.getItem('auth_token')
 
 
 async function submitForm() {
@@ -27,8 +28,9 @@ async function submitForm() {
         "http://127.0.0.1:5000/api/movies",
         formData,
         {
-            headers: {
-                'Content-Type': 'multipart/form-data'
+            'headers': {
+                'Content-Type': 'multipart/form-data',
+                'Authentication-Token': auth_token,
             }
         }
     );

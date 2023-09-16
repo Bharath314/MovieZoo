@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 const router = useRouter();
 
-const apiUrl = "http://127.0.0.1:5000/api/movies"
+const apiUrl = "http://127.0.0.1:5000/api/venues"
 const auth_token = localStorage.getItem('auth_token');
 
 const data = ref((await axios.get(
@@ -17,23 +17,23 @@ const data = ref((await axios.get(
             }
     })).data);
 
-function deleteMovie(id) {
+function deleteVenue(id) {
     axios.delete(
-        `http://127.0.0.1:5000/api/movies/${id}`,
+        `http://127.0.0.1:5000/api/venues/${id}`,
         {
             'headers': {
                 'Authentication-Token': auth_token,
             }
         }
     );
-    data.value = data.value.filter((movie) => movie.id !== id);
+    data.value = data.value.filter((venue) => venue.id !== id);
 }
 </script>
 
 <template>
-    <li v-for="movie in data">
-        {{ movie.name }}
-        <a :href="/movies/ + movie.id">Update</a>
-        <button @click="deleteMovie(movie.id)">Delete</button>
+    <li v-for="venue in data">
+        {{ venue.name }}
+        <a :href="/venues/ + venue.id">Update</a>
+        <button @click="deleteVenue(venue.id)">Delete</button>
     </li>
 </template>

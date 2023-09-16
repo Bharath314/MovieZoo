@@ -14,6 +14,7 @@ async function submitForm() {
     const form = document.getElementById('updateMovieForm');
     const fileInput = form.querySelector('input[type="file"]');
     const formData = new FormData(form);
+    const auth_token = localStorage.getItem('auth_token')
 
     formData.forEach((value, key) => {
         if (value === '' || value === null) {
@@ -30,7 +31,8 @@ async function submitForm() {
         formData,
         {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                'Authentication-Token': auth_token,
             }
         }
     );

@@ -4,6 +4,7 @@ from datetime import datetime
 
 from flask import current_app, request
 from flask_restful import Resource
+from flask_security import auth_required, roles_required
 from zoo import db
 from zoo.API.schemas import MovieSchema
 from zoo.models import Movie
@@ -31,6 +32,8 @@ class MovieListAPI(Resource):
             serialized_movies.append(self.schema.dump(movie))
         return serialized_movies, 200
     
+    @auth_required('token')
+    @roles_required('admin')
     def post(self):
         args = request.form
         print(args)
@@ -65,6 +68,8 @@ class MovieAPI(Resource):
         serialized_movie = self.schema.dump(movie)
         return serialized_movie, 200
     
+    @auth_required('token')
+    @roles_required('admin')
     def patch(self, id):
         args = request.form
         errors = self.schema.validate(args, partial=('id', 'name',))
@@ -85,6 +90,8 @@ class MovieAPI(Resource):
         serialized_movie = self.schema.dump(movie)
         return serialized_movie, 200
 
+    @auth_required('token')
+    @roles_required('admin')
     def delete(self, id):
         movie = db.one_or_404(db.select(Movie).filter_by(id=id))
         if movie.poster != os.path.join(current_app.config["POSTER_FOLDER"], "default.png"):
