@@ -31,9 +31,11 @@ function deleteMovie(id) {
 </script>
 
 <template>
+<ul>
     <li v-for="movie in data">
         {{ movie.name }}
-        <a :href="/movies/ + movie.id">Update</a>
+        <a :href="/admin-movies/ + movie.id">Update</a>
         <button @click="deleteMovie(movie.id)">Delete</button>
     </li>
+</ul>
 </template>

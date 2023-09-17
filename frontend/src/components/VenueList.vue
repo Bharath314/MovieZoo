@@ -31,9 +31,11 @@ function deleteVenue(id) {
 </script>
 
 <template>
+<ul>
     <li v-for="venue in data">
         {{ venue.name }}
-        <a :href="/venues/ + venue.id">Update</a>
+        <a :href="/admin-venues/ + venue.id">Update</a>
         <button @click="deleteVenue(venue.id)">Delete</button>
     </li>
+</ul>
 </template>

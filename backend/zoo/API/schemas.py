@@ -40,7 +40,9 @@ class MovieSchema(Schema):
 class ShowSchema(Schema):
     id = fields.Int(required=True)
     movie_id = fields.Int(required=True)
+    movie = fields.Str(dump_only=True)
     venue_id = fields.Int(required=True)
+    venue = fields.Str(dump_only=True)
     tickets_booked = fields.Int()
     price = fields.Int(required=True)
 

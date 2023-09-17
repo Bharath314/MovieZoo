@@ -31,7 +31,7 @@ async function submitForm() {
         }
     );
 
-    router.push({ name: 'venues', });
+    router.push({ name: 'admin-venues', });
 
 }
 </script>

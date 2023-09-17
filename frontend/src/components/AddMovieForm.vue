@@ -35,7 +35,7 @@ async function submitForm() {
         }
     );
 
-    router.push({ name: 'movies', });
+    router.push({ name: 'admin-movies', });
 
 }
 </script>

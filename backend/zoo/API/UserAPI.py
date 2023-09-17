@@ -1,6 +1,6 @@
 from flask import current_app, request
 from flask_restful import Resource
-from flask_security import current_user, auth_required
+from flask_security import current_user, auth_required, hash_password
 from zoo.models import db, user_datastore
 from zoo.API.schemas import UserSchema
 
@@ -35,7 +35,7 @@ class SignUpAPI(Resource):
             return {'errors': errors}, 400
         user = user_datastore.create_user(
             email= args['email'],
-            password = args['password']
+            password = hash_password(args['password'])
         )
         user_datastore.add_role_to_user(user, 'user')
         db.session.commit()

@@ -77,7 +77,8 @@ class MovieAPI(Resource):
             return {'errors': errors}, 400
         movie = db.one_or_404(db.select(Movie).filter_by(id=id))
         if "poster" in request.files:
-            os.remove(movie.poster)
+            if movie.poster != os.path.join(current_app.config["POSTER_FOLDER"], "default.png"):
+                os.remove(movie.poster)
             movie.poster = save_poster(request.files["poster"])
         for attr in args:
             if attr == "release_date":

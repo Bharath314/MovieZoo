@@ -20,32 +20,38 @@ const router = createRouter({
             component: HomeView
         },
         {
-            path: '/movies',
-            name: 'movies',
+            path: '/admin-movies',
+            name: 'admin-movies',
             component: () => import('../views/MovieListView.vue')
         },
         {
-            path: '/movies/add',
+            path: '/admin-movies/add',
             name: 'add_movies',
             component: () => import('../views/AddMovieView.vue')
         },
         {
-            path: '/movies/:id',
+            path: '/admin-movies/:id',
             component: () => import('../views/Movie.vue')
         },
         {
-            path: '/venues',
-            name: 'venues',
+            path: '/admin-venues',
+            name: 'admin-venues',
             component: () => import('../views/VenueListView.vue')
         },
         {
-            path: '/venues/add',
+            path: '/admin-venues/add',
             name: 'add_venues',
             component: () => import('../views/AddVenueView.vue')
         },
         {
-            path: '/venues/:id',
+            path: '/admin-venues/:id',
+            name: 'admin-venue_show_list',
             component: () => import('../views/Venue.vue')
+        },
+        {
+            path: '/admin-venues/:id/shows/add',
+            name: 'add_show',
+            component: () => import('../views/AddShowView.vue')
         }
     ]
 })

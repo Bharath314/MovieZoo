@@ -7,6 +7,6 @@ import VenueList from '../components/VenueList.vue'
     <Suspense>
         <VenueList />
     </Suspense>
-    <a href="/venues/add">Add Venue</a>
+    <a href="/admin-venues/add">Add Venue</a>
 </main>
 </template>

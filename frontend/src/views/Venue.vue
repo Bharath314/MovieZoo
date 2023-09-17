@@ -1,6 +1,7 @@
 <script setup>
 import axios from 'axios';
 import {useRoute, useRouter} from 'vue-router';
+import VenueShowsList from '../components/VenueShowsList.vue'
 
 const route = useRoute();
 const router = useRouter();
@@ -37,7 +38,7 @@ async function submitForm() {
         }
     );
 
-    router.push({ name: 'venues', });
+    router.push({ name: 'admin-venues', });
 
 }
 
@@ -59,4 +60,5 @@ async function submitForm() {
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+<VenueShowsList></VenueShowsList>
 </template>

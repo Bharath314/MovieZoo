@@ -7,6 +7,6 @@ import MovieList from '../components/MovieList.vue'
     <Suspense>
         <MovieList />
     </Suspense>
-    <a href="/movies/add">Add Movie</a>
+    <a href="/admin-movies/add">Add Movie</a>
 </main>
 </template>
