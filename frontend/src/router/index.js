@@ -52,6 +52,16 @@ const router = createRouter({
             path: '/admin-venues/:id/shows/add',
             name: 'add_show',
             component: () => import('../views/AddShowView.vue')
+        },
+        {
+            path: '/movies/:movie_id',
+            name: 'user_movie',
+            component: () => import('../views/UserMovieView.vue')
+        },
+        {
+            path: '/book/:show_id',
+            name: 'book',
+            component: () => import('../views/BookingView.vue')
         }
     ]
 })

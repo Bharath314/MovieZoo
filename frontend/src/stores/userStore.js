@@ -5,6 +5,7 @@ import axios from 'axios';
 
 
 export const useUserStore = defineStore('user', () => {
+    const user_id = ref();
     const isLoggedIn = ref(false);
     const isAdmin = ref(false);
     const email = ref();
@@ -26,6 +27,7 @@ export const useUserStore = defineStore('user', () => {
             }
         })
         .then(function (response) {
+            user_id.value = response.data.id;
             isLoggedIn.value = true;
             email.value = response.data.email;
             isAdmin.value = (response.data.role === 'admin') ? true : false;
@@ -49,6 +51,6 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
-    return {isLoggedIn, isAdmin, email, logout, fetchUser, setState};
+    return {user_id, isLoggedIn, isAdmin, email, logout, fetchUser, setState};
 })
 

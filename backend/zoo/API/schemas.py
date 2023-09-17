@@ -80,8 +80,26 @@ class BookingSchema(Schema):
     def validate_id(self, value):
         if value <= 0:
             raise ValidationError("ID must be greater than 0")
+    
+    @validates("ticket_count")
+    def validate_ticket_count(self, value):
+        show_id = self.context.get("show_id")
+        show = db.one_or_404(db.select(Show).filter_by(id=show_id))
+        venue = show.venue
+        if venue.capacity == show.tickets_booked:
+            raise ValidationError("Show is housefull")
+        elif show.tickets_booked + value > venue.capacity:
+            raise ValidationError(f"There are only {venue.capacity - show.tickets_booked} tickets left")
         
+    def with_context(self, **kwargs):
+        contextual_schema = BookingSchema()
+        for key in kwargs:
+            contextual_schema.context[key] = kwargs[key]
+        return contextual_schema
+
+
 class UserSchema(Schema):
+    id = fields.Int(dump_only=True)
     email = fields.Email(required=True)
     role = fields.Str(required=True)
     password = fields.Str(load_only=True)

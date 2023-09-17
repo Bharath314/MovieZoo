@@ -15,8 +15,10 @@ class CurrentUserAPI(Resource):
         user_dict = {
             'email': current_user.email,
             'role': current_user.roles[0].name,
+            'id': current_user.id
         }
         serialized_user = self.schema.dump(user_dict)
+        print(serialized_user)
         return serialized_user, 200
 
 class SignUpAPI(Resource):

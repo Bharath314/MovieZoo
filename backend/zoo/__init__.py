@@ -26,7 +26,7 @@ CORS(app)
 
 from zoo.API.VenueAPI import VenueAPI, VenueListAPI
 from zoo.API.MovieAPI import MovieAPI, MovieListAPI
-from zoo.API.ShowAPI import ShowAPI, VenueShowsAPI
+from zoo.API.ShowAPI import ShowAPI, VenueShowsAPI, MovieShowsAPI
 from zoo.API.BookingAPI import BookingAPI
 from zoo.API.UserAPI import CurrentUserAPI, SignUpAPI
 
@@ -37,5 +37,6 @@ api.add_resource(VenueAPI, '/api/venues/<int:id>')
 api.add_resource(VenueShowsAPI, '/api/venues/<int:venue_id>/shows')
 api.add_resource(MovieListAPI, '/api/movies')
 api.add_resource(MovieAPI, '/api/movies/<int:id>')
+api.add_resource(MovieShowsAPI, '/api/movies/<int:movie_id>/shows')
 api.add_resource(ShowAPI, '/api/show/<int:id>')
 api.add_resource(BookingAPI, '/api/booking')

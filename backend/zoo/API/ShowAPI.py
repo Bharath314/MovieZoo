@@ -26,12 +26,8 @@ class ShowAPI(Resource):
         serialized_show = self.schema.dump(show)
         return serialized_show, 201
     
-    def get(self):
-        args = request.get_json()
-        errors = self.schema.validate(args, partial=("movie_id", "venue_id", "price",))
-        if errors:
-            return {"errors": errors}, 400
-        show = db.one_or_404(db.select(Show).filter_by(id=args["id"]))
+    def get(self, id):
+        show = db.one_or_404(db.select(Show).filter_by(id=id))
         serialized_show = self.schema.dump(show)
         return serialized_show, 200
     
@@ -95,3 +91,24 @@ class VenueShowsAPI(Resource):
         db.session.commit()
         serialized_show = self.schema.dump(show)
         return serialized_show, 201
+
+class MovieShowsAPI(Resource):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.schema = ShowSchema()
+    
+    def get(self, movie_id):
+        shows = db.session.execute(db.select(Show).filter_by(movie_id=movie_id)).scalars()
+        serialized_shows = []
+        for show in shows:
+            show_dict = {
+                "id": show.id,
+                "movie_id": show.movie_id,
+                "movie": show.movie.name,
+                "venue_id": show.venue_id,
+                "venue": show.venue.name,
+                "tickets_booked": show.tickets_booked
+            }
+            serialized_shows.append(self.schema.dump(show_dict))
+        return serialized_shows, 200
