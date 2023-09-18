@@ -4,13 +4,13 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { useUserStore } from '../stores/userStore';
 
-const user_store = useUserStore();
 const router = useRouter();
 const route = useRoute();
 
-const movie_id = route.params.movie_id;
-const movie = (await axios.get(`http://127.0.0.1:5000/api/movies/${movie_id}`)).data;
-const apiUrl = `http://127.0.0.1:5000/api/movies/${movie_id}/shows`;
+const user_store = useUserStore();
+const venue_id = route.params.venue_id;
+const venue = (await axios.get(`http://127.0.0.1:5000/api/venues/${venue_id}`)).data;
+const apiUrl = `http://127.0.0.1:5000/api/venues/${venue_id}/shows`;
 
 const shows_list = ref((await axios.get(apiUrl)).data);
 
@@ -24,14 +24,13 @@ function book(show_id) {
 </script>
 
 <template>
-<h1>{{ movie.name }}</h1>
+<h1>{{ venue.name }}</h1>
 <div>
-    <p>Release date: <span v-if="movie.release_date">{{ movie.release_date }}</span><span v-else>TBA</span></p>
+    <p>City: {{ venue.city }}</p>
 </div>
 <ul>
     <li v-for="show in shows_list">
-        {{ show.venue }}
-
+        {{ show.movie }}
         <button @click="book(show.id)">Book now</button>
     </li>
 </ul>

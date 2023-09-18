@@ -27,16 +27,16 @@ function book(movie_id) {
 </script>
 
 <template>
-    <main>
-        Welcome to MovieZoo! 
-        <div v-if="user_store.isLoggedIn">Welcome {{ user_store.email }}</div>
-        <div v-if="!user_store.isAdmin">
-            <ul>
-                <li v-for="movie in data">
-                    {{ movie.name }}
-                    <button @click="book(movie.id)">Book now</button>
-                </li>
-            </ul>
-        </div>
-    </main>
+<main>
+    Welcome to MovieZoo! 
+    <div v-if="user_store.isLoggedIn">Welcome {{ user_store.email }}</div>
+    <div v-if="!user_store.isAdmin">
+        <ul>
+            <li v-for="movie in data">
+                {{ movie.name }}                
+                <a :href="'/movies/'+movie.id">Book now</a>
+            </li>
+        </ul>
+    </div>
+</main>
 </template>

@@ -25,11 +25,18 @@ if (!user_store.isLoggedIn) user_store.setState();
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <AdminNav v-if="user_store.isAdmin"/>
+          <ul v-if="!user_store.isAdmin" class="navbar-nav me-auto mb-2 mb-lg-0">
+            <RouterLink to="/venues" class="nav-link">Venues</RouterLink>
+          </ul>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <RouterLink v-if="!user_store.isLoggedIn" to="/login" class="btn btn-primary">Login</RouterLink>
-              <a v-if="!user_store.isLoggedIn" href="/register" class="nav-item">Sign Up</a>
-              <button v-else @click="user_store.logout()" class="btn btn-secondary">Logout</button>
+            <li v-if="!user_store.isLoggedIn" class="nav-item">
+              <RouterLink  to="/login" class="btn btn-primary">Login</RouterLink>
+            </li>
+            <li v-if="!user_store.isLoggedIn" class="nav-item">
+              <RouterLink to="/register" class="nav-link">Sign Up</RouterLink>
+            </li>
+            <li v-else @click="user_store.logout()" class="nav-item">
+              <button class="btn btn-secondary">Logout</button>
             </li>
           </ul>
         </div>

@@ -31,7 +31,10 @@ function submitForm() {
                     'Authentication-Token': auth_token,
                 }
             }
-        )
+        ).then(() => {
+            router.push({'name': 'home'})
+        })
+        
     }
 }
 

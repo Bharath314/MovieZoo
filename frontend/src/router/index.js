@@ -59,10 +59,20 @@ const router = createRouter({
             component: () => import('../views/UserMovieView.vue')
         },
         {
+            path: '/venues',
+            name: 'user_venues',
+            component: () => import('../views/UserVenueListView.vue')
+        },
+        {
+            path: '/venues/:venue_id',
+            name: 'user_venue',
+            component: () => import('../views/UserVenueView.vue')
+        },
+        {
             path: '/book/:show_id',
             name: 'book',
             component: () => import('../views/BookingView.vue')
-        }
+        },
     ]
 })
 
