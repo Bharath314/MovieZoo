@@ -27,12 +27,13 @@ function book(show_id) {
 <h1>{{ movie.name }}</h1>
 <div>
     <p>Release date: <span v-if="movie.release_date">{{ movie.release_date }}</span><span v-else>TBA</span></p>
+    <img :src="'http://127.0.0.1:5000/'+movie.poster.slice(4)">
 </div>
-<ul>
+<ul v-if="shows_list.length">
     <li v-for="show in shows_list">
         {{ show.venue }}
-
         <button @click="book(show.id)">Book now</button>
     </li>
 </ul>
+<p v-else>No shows available</p>
 </template>

@@ -22,15 +22,7 @@ class MovieSchema(Schema):
     id = fields.Int(required=True)
     name = fields.Str(required=True)
     release_date = fields.Date(load_default=None, allow_none=True)
-    poster = fields.Str(load_only=True)
-
-    @pre_load(pass_many=False)
-    def string_to_none(self, data, many, **kwargs):
-        modified_data = {}
-        turn_to_none = lambda x: None if x == '' else x
-        for k, v in data.items():
-            modified_data[k] = turn_to_none(v)
-        return modified_data
+    poster = fields.Str(dump_only=True)
 
     @validates("id")
     def validate_id(self, value):

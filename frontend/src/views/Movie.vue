@@ -45,6 +45,7 @@ async function submitForm() {
 
 <template>
 Movie {{ route.params.id }}
+<img :src="'http://127.0.0.1:5000/'+movie_data.poster.slice(4)">
 <form id="updateMovieForm" @submit.prevent="submitForm" method="POST" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="name" class="form-label">Name</label>
