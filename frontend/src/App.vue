@@ -2,15 +2,18 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { useUserStore } from './stores/userStore';
 import AdminNav from './components/AdminNav.vue';
+import SearchBar from './components/SearchBar.vue';
+import SearchResultsView from './views/SearchResultsView.vue';
 
 const user_store = useUserStore();
 const router = useRouter();
 
 if (!user_store.isLoggedIn) user_store.setState();
 
-// if (!user_store.isLoggedIn) {
-//   router.push({ 'name': 'home'})
-// }
+function search(search_term) {
+  SearchResultsView.search(search_term);
+}
+
 
 </script>
 
@@ -28,6 +31,7 @@ if (!user_store.isLoggedIn) user_store.setState();
           <ul v-if="!user_store.isAdmin" class="navbar-nav me-auto mb-2 mb-lg-0">
             <RouterLink to="/venues" class="nav-link">Venues</RouterLink>
           </ul>
+          <SearchBar @search-pressed="search"></SearchBar>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li v-if="!user_store.isLoggedIn" class="nav-item">
               <RouterLink  to="/login" class="btn btn-primary">Login</RouterLink>
