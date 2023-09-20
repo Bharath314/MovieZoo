@@ -9,6 +9,7 @@ from flask_security.models import fsqla_v3 as fsqla
 
 from zoo.config import Config
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -19,7 +20,7 @@ db.init_app(app)
 
 CORS(app)
 
-from zoo.API.VenueAPI import VenueAPI, VenueListAPI
+from zoo.API.VenueAPI import VenueAPI, VenueListAPI, ExportVenueDetailsAPI
 from zoo.API.MovieAPI import MovieAPI, MovieListAPI
 from zoo.API.ShowAPI import ShowAPI, VenueShowsAPI, MovieShowsAPI
 from zoo.API.BookingAPI import BookingAPI
@@ -31,6 +32,7 @@ api.add_resource(CurrentUserAPI, '/api/current-user')
 api.add_resource(VenueListAPI, '/api/venues')
 api.add_resource(VenueAPI, '/api/venues/<int:id>')
 api.add_resource(VenueShowsAPI, '/api/venues/<int:venue_id>/shows')
+api.add_resource(ExportVenueDetailsAPI, '/api/venues/<int:venue_id>/export')
 api.add_resource(MovieListAPI, '/api/movies')
 api.add_resource(MovieAPI, '/api/movies/<int:id>')
 api.add_resource(MovieShowsAPI, '/api/movies/<int:movie_id>/shows')

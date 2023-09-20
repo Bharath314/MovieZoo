@@ -9,12 +9,12 @@ const router = useRouter();
 const id = route.params.id;
 const apiUrl = `http://127.0.0.1:5000/api/venues/${id}`;
 const venue_data = (await axios.get(apiUrl)).data;
-
+const auth_token = localStorage.getItem('auth_token')
 
 async function submitForm() {
     const form = document.getElementById('updateVenueForm');
     const formData = new FormData(form);
-    const auth_token = localStorage.getItem('auth_token')
+    
 
     formData.forEach((value, key) => {
         if (value === '' || value === null) {
@@ -42,9 +42,24 @@ async function submitForm() {
 
 }
 
+async function exportCSV() {
+    await axios.get(
+        `http://127.0.0.1:5000/api/venues/${id}/export`,
+        {
+            headers: {
+                'Authentication-Token': auth_token,
+            }
+        }
+    ).then(
+        alert("It's working ig")
+    );
+}
+
 </script>
 
 <template>
+<h1>{{ venue_data.name }}</h1>
+<button @click="exportCSV">Export details</button>
 <form id="updateVenueForm" @submit.prevent="submitForm" method="POST" enctype="application/json">
     <div class="mb-3">
         <label for="name" class="form-label">Name</label>

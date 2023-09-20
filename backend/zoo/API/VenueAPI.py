@@ -3,8 +3,10 @@ from flask_security import auth_required, roles_required
 from zoo import db
 from zoo.models import Venue
 from flask_restful import Resource
+
 from zoo.API.schemas import VenueSchema
 from zoo.cache import *
+from zoo.tasks import export_venue_csv
 
 class VenueListAPI(Resource):
     def __init__(self) -> None:
@@ -65,3 +67,13 @@ class VenueAPI(Resource):
         db.session.commit()
         cache.clear()
         return None, 204
+
+
+class ExportVenueDetailsAPI(Resource):
+    
+    @auth_required('token')
+    @roles_required('admin')
+    def get(self, venue_id):
+        venue = get_venue(venue_id)
+        export_venue_csv.delay(venue_id)
+        return venue, 200

@@ -61,7 +61,7 @@ class VenueShowsAPI(Resource):
         self.schema = ShowSchema()
 
     def get(self, venue_id):
-        shows = get_shows_by_venue()
+        shows = get_shows_by_venue(venue_id)
         return shows, 200
 
     @auth_required('token')
