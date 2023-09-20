@@ -7,21 +7,16 @@ from flask_restful import Api
 from flask_security import Security, SQLAlchemyUserDatastore, auth_required, hash_password
 from flask_security.models import fsqla_v3 as fsqla
 
+from zoo.config import Config
+
 app = Flask(__name__)
-
-app.config['SECRET_KEY'] = "f4fa483fa875f9cbf287dac5e6f36f006cd889289913d1698007df55cd9898cd"
-app.config['SECURITY_PASSWORD_SALT'] = "317253998663595341291509795129662632201"
-app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
-app.config["SESSION_COOKIE_SAMESITE"] = "strict"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-app.config['WTF_CSRF_ENABLED'] = False
-app.config['POSTER_FOLDER'] = os.path.join('zoo', 'static', 'posters')
-app.config['SECURITY_SEND_REGISTER_EMAIL'] = False
-
+app.config.from_object(Config)
 
 api = Api(app)
+
 db = SQLAlchemy()
 db.init_app(app)
+
 CORS(app)
 
 from zoo.API.VenueAPI import VenueAPI, VenueListAPI

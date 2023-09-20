@@ -6,6 +6,7 @@ from flask_security import auth_required, roles_required
 from zoo import db
 from zoo.API.schemas import ShowSchema
 from zoo.models import Show
+from zoo.cache import *
 
 class ShowAPI(Resource):
 
@@ -24,12 +25,12 @@ class ShowAPI(Resource):
         db.session.add(show)
         db.session.commit()
         serialized_show = self.schema.dump(show)
+        cache.clear()
         return serialized_show, 201
     
     def get(self, id):
-        show = db.one_or_404(db.select(Show).filter_by(id=id))
-        serialized_show = self.schema.dump(show)
-        return serialized_show, 200
+        show = get_show(id)
+        return show, 200
     
     def patch(self):
         args = request.get_json()
@@ -41,6 +42,7 @@ class ShowAPI(Resource):
             setattr(show, attr, args[attr])
         db.session.commit()
         serialized_show = self.schema.dump(show)
+        cache.clear()
         return serialized_show, 200
 
     @auth_required('token')
@@ -49,6 +51,7 @@ class ShowAPI(Resource):
         show = db.one_or_404(db.select(Show).filter_by(id=id))
         db.session.delete(show)
         db.session.commit()
+        cache.clear()
         return None, 204
     
 class VenueShowsAPI(Resource):
@@ -58,19 +61,8 @@ class VenueShowsAPI(Resource):
         self.schema = ShowSchema()
 
     def get(self, venue_id):
-        shows = db.session.execute(db.select(Show).filter_by(venue_id=venue_id)).scalars()
-        serialized_shows = []
-        for show in shows:
-            show_dict = {
-                "id": show.id,
-                "movie_id": show.movie_id,
-                "movie": show.movie.name,
-                "venue_id": show.venue_id,
-                "venue": show.venue.name,
-                "tickets_booked": show.tickets_booked
-            }
-            serialized_shows.append(self.schema.dump(show_dict))
-        return serialized_shows, 200
+        shows = get_shows_by_venue()
+        return shows, 200
 
     @auth_required('token')
     @roles_required('admin')
@@ -89,6 +81,7 @@ class VenueShowsAPI(Resource):
             setattr(show, attr, args[attr])
         db.session.add(show)
         db.session.commit()
+        cache.clear()
         serialized_show = self.schema.dump(show)
         return serialized_show, 201
 
@@ -99,16 +92,5 @@ class MovieShowsAPI(Resource):
         self.schema = ShowSchema()
     
     def get(self, movie_id):
-        shows = db.session.execute(db.select(Show).filter_by(movie_id=movie_id)).scalars()
-        serialized_shows = []
-        for show in shows:
-            show_dict = {
-                "id": show.id,
-                "movie_id": show.movie_id,
-                "movie": show.movie.name,
-                "venue_id": show.venue_id,
-                "venue": show.venue.name,
-                "tickets_booked": show.tickets_booked
-            }
-            serialized_shows.append(self.schema.dump(show_dict))
-        return serialized_shows, 200
+        shows = get_shows_by_movie(movie_id)
+        return shows, 200

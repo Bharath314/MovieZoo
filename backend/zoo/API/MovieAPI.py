@@ -8,6 +8,7 @@ from flask_security import auth_required, roles_required
 from zoo import db
 from zoo.API.schemas import MovieSchema
 from zoo.models import Movie
+from zoo.cache import *
 
 
 def save_poster(file):
@@ -26,17 +27,13 @@ class MovieListAPI(Resource):
         self.schema = MovieSchema()
 
     def get(self):
-        movies = db.session.execute(db.select(Movie).order_by(Movie.name)).scalars()
-        serialized_movies = []
-        for movie in movies:
-            serialized_movies.append(self.schema.dump(movie))
-        return serialized_movies, 200
+        movies_list = get_all_movies()
+        return movies_list, 200
     
     @auth_required('token')
     @roles_required('admin')
     def post(self):
         args = request.form
-        print(args)
         errors = self.schema.validate(args, partial=("id", "poster", "release_date"))
         if errors:
             return {"errors": errors}, 400
@@ -54,6 +51,7 @@ class MovieListAPI(Resource):
             setattr(movie, "poster", poster_location)
         db.session.add(movie)
         db.session.commit()
+        cache.clear()
         serialized_movie = self.schema.dump(movie)
         return serialized_movie, 201
 
@@ -64,9 +62,8 @@ class MovieAPI(Resource):
         self.schema = MovieSchema()
 
     def get(self, id):
-        movie = db.one_or_404(db.select(Movie).filter_by(id=id))
-        serialized_movie = self.schema.dump(movie)
-        return serialized_movie, 200
+        movie = get_movie(id)
+        return movie, 200
     
     @auth_required('token')
     @roles_required('admin')
@@ -88,6 +85,7 @@ class MovieAPI(Resource):
             else:
                 setattr(movie, attr, args[attr])
         db.session.commit()
+        cache.clear()
         serialized_movie = self.schema.dump(movie)
         return serialized_movie, 200
 
@@ -99,4 +97,5 @@ class MovieAPI(Resource):
             os.remove(movie.poster)
         db.session.delete(movie)
         db.session.commit()
+        cache.clear()
         return None, 204

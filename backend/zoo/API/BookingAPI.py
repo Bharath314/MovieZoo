@@ -4,6 +4,7 @@ from flask_security import auth_required
 from zoo import db
 from zoo.API.schemas import BookingSchema
 from zoo.models import Booking, Show
+from zoo.cache import *
 
 class BookingAPI(Resource):
     def __init__(self) -> None:
@@ -24,6 +25,7 @@ class BookingAPI(Resource):
         show.tickets_booked += booking.ticket_count
         db.session.commit()
         serialized_booking = self.schema.dump(booking)
+        cache.clear()
         return serialized_booking, 201
     
     def get(self):

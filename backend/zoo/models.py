@@ -78,6 +78,12 @@ app.security = Security(app, user_datastore)
 
 with app.app_context():
     db.create_all()
-    if not app.security.datastore.find_user(email="test@me.com"):
-        app.security.datastore.create_user(email="test@me.com", password=hash_password("password"))
+    
+    if not app.security.datastore.find_user(email="admin@moviezoo.com"):
+        user_role = Role(name="user", description="Does usery stuff")
+        admin_role = Role(name="admin", description="Does adminy stuff")
+        db.session.add(user_role)
+        db.session.add(admin_role)
+        admin = user_datastore.create_user(email="admin@moviezoo.com", password=hash_password("password"))
+        user_datastore.add_role_to_user(admin, 'admin')
     db.session.commit()   

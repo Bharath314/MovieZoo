@@ -31,9 +31,7 @@ class SignUpAPI(Resource):
         args = request.get_json()
         print(args)
         errors = self.schema.with_context(password=args['password'],).validate(args, partial=('role', ))
-        print(errors)
         if errors:
-            print("bruh")
             return {'errors': errors}, 400
         user = user_datastore.create_user(
             email= args['email'],
