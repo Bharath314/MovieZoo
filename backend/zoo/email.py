@@ -27,11 +27,10 @@ def send_email(
 
     if attachment:
         part = MIMEApplication(attachment.read(), _subtype=subtype)
-        part.add_header("Content-Disposition", "attachment", filename)
+        part.add_header("Content-Disposition", "attachment", filename=filename)
         msg.attach(part)
     
     s = smtplib.SMTP(host=SMTP_SERVER_HOST, port=SMTP_SERVER_PORT)
     s.login(SENDER_ADDRESS, SENDER_PASSWORD)
     s.send_message(msg)
-    print("hey")
     s.quit()
