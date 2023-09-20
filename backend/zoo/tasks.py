@@ -4,9 +4,18 @@ import os
 from flask import render_template
 from jinja2 import Template
 
+from zoo.models import User, Booking
 from zoo.worker import celery_app
 from zoo.cache import get_venue, get_shows_by_venue
 from zoo.email import send_email
+
+@celery_app.on_after_finalize.connect
+def setup_periodic_tasks(sender, **kwargs):
+    sender.add_periodic_task(
+        10.0,
+        send_daily_reminder.s(),
+        name='Daily Reminder'
+    )
 
 @celery_app.task()
 def export_venue_csv(venue_id):
@@ -37,3 +46,35 @@ def export_venue_csv(venue_id):
     send_email(address, subject, message, attachment=file, filename="venue_analytics.csv", subtype='csv')
     os.remove("venue_analytics.csv")
 
+@celery_app.task()
+def send_daily_reminder():
+    template_str = """
+<p>
+    Dear Viewer,
+</p>
+<br />
+<p>
+    Looks like you haven't watched anything! Don't miss out on amazing experiences and book now!
+</p>
+<p>
+    Happy Viewing,
+    MovieZoo
+</p>
+"""
+    users = User.query.all()
+    bookings = Booking.query.all()
+
+    booked_users = set()
+    for booking in bookings:
+        booked_users.add(booking.user_id)
+    
+    non_booked_users = set()
+    for user in users:
+        if user.id != 1 and user.id not in booked_users:
+            message = Template(template_str).render()
+            address = user.email
+            subject = f"Do not miss out on entertainment!"
+
+            send_email(address, subject, message)
+    
+    

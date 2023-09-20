@@ -74,4 +74,4 @@ def get_shows_by_movie(movie_id):
 def get_show(id):
     show = db.one_or_404(db.select(Show).filter_by(id=id))
     serialized_show = show_schema.dump(show)
-    return show
+    return serialized_show
