@@ -2,6 +2,7 @@ import csv
 import os
 import matplotlib.pyplot as plt
 
+from celery.schedules import crontab
 from flask import render_template
 from jinja2 import Template
 
@@ -14,11 +15,13 @@ from zoo.email import send_email
 @celery_app.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(
+        # crontab(hour='7'),
         10.0,
         send_daily_reminder.s(),
         name='Daily Reminder'
     )
     sender.add_periodic_task(
+        # crontab(day_of_month='1', hour=7, minute=30),
         10.0,
         monthly_report.s(),
         name='Monthly Report'

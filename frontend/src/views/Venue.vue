@@ -51,7 +51,7 @@ async function exportCSV() {
             }
         }
     ).then(
-        alert("It's working ig")
+        alert("csv exported successfully to admin mail")
     );
 }
 
