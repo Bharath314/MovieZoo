@@ -14,7 +14,7 @@ from zoo.email import send_email
 @celery_app.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(
-        100.0,
+        10.0,
         send_daily_reminder.s(),
         name='Daily Reminder'
     )
@@ -75,7 +75,6 @@ def send_daily_reminder():
     for booking in bookings:
         booked_users.add(booking.user_id)
     
-    non_booked_users = set()
     for user in users:
         if user.id != 1 and user.id not in booked_users:
             message = Template(template_str).render()

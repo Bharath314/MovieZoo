@@ -31,7 +31,7 @@ function search(search_term) {
           <ul v-if="!user_store.isAdmin" class="navbar-nav me-auto mb-2 mb-lg-0">
             <RouterLink to="/venues" class="nav-link">Venues</RouterLink>
           </ul>
-          <SearchBar @search-pressed="search"></SearchBar>
+          <Suspense><SearchBar v-if="!user_store.isAdmin" @search-pressed="search"></SearchBar></Suspense>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li v-if="!user_store.isLoggedIn" class="nav-item">
               <RouterLink  to="/login" class="btn btn-primary">Login</RouterLink>

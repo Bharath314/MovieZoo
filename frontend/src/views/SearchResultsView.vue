@@ -7,7 +7,6 @@ const search_store = useSearchStore();
 const router = useRouter();
 
 
-
 </script>
 
 
