@@ -17,6 +17,8 @@
     "format": "oxfmt src/"
   },
   "dependencies": {
+    "@openvue/themes": "^1.0.0",
+    "openvue": "^1.0.0",
     "pinia": "^4.0.2",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
