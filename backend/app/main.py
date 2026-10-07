@@ -19,7 +19,7 @@ app = FastAPI(title="MovieZoo Backend API", lifespan=lifespan)
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-@app.get("/")
+@app.get(settings.API_V1_STR)
 async def read_root():
     return {"Hello": "World"}
 
