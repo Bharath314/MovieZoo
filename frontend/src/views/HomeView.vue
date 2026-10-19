@@ -1,16 +1,27 @@
+<script setup lang="ts">
+import { useAuthStore } from '@/stores/auth';
+import { MegaMenu, Button } from 'openvue';
+import { RouterLink, RouterView } from 'vue-router';
+
+const authStore = useAuthStore();
+</script>
+
 <template>
   <header>
     <MegaMenu class>
       <template #start>
         <RouterLink to="/" class="brand">
-          <strong>MovieZoo</strong>
+          <h2>MovieZoo</h2>
         </RouterLink>
       </template>
       <template #end>
-        <nav>
+        <span v-if="!authStore.access_token">
           <Button as="RouterLink" to="/login" label="Login" variant="text" />
           <Button as="RouterLink" to="/signup" label="Sign Up" />
-        </nav>
+        </span>
+        <span v-else>
+          <Button label="Sign out" @click="authStore.logout" />
+        </span>
       </template>
     </MegaMenu>
   </header>
