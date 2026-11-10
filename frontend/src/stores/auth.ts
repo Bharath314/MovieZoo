@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
     const full_name = ref();
     const created_at = ref();
     const access_token = ref();
+    const email = ref();
 
     async function login(email: string, password: string) {
         const {error, data} = await useFetch(API_URL + "/login/access-token", {
@@ -39,7 +40,8 @@ export const useAuthStore = defineStore('auth', () => {
         if (data) {
             id.value = data.value.id
             role.value = data.value.role
-            // temp
+            email.value = data.value.email
+            // TODO: change this
             role.value = 'superuser'
             full_name.value = data.value.full_name
             created_at.value = data.value.created_at
@@ -48,14 +50,14 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function logout() {
-        id.value = undefined
-        role.value = undefined
-        full_name.value = undefined
-        created_at.value = undefined
-        access_token.value = undefined
+        id.value = null
+        role.value = null
+        full_name.value = null
+        created_at.value = null
+        access_token.value = null
         localStorage.removeItem('access_token')
     }
-    return {id, role, full_name, created_at, access_token, login, me, logout}
+    return {id, email, role, full_name, created_at, access_token, login, me, logout}
 })
 
 if (import.meta.hot) {

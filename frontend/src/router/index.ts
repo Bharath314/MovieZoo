@@ -19,6 +19,12 @@ const router = createRouter({
       name: 'signup',
       component: () => import('../views/SignupView.vue'),
     },
+    //TODO: add route guard
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/DashboardView.vue'),
+    }
   ],
 })
 

@@ -1,18 +1,29 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import Button from 'openvue/button'
 import InputText from 'openvue/inputtext'
 import Password from 'openvue/password'
 import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
+const route = useRoute()
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const loading = ref(false)
 
 const authStore = useAuthStore();
+
+async function redirect() {
+  if (route.query.redirect) {
+    router.push(route.query.redirect as string)
+  } else if (authStore.role === 'user') {
+    router.push('/')
+  } else {
+    router.push('/dashboard')
+  }
+}
 
 async function onSubmit() {
   error.value = ''
@@ -23,14 +34,14 @@ async function onSubmit() {
       const responseData = data.value
       error.value =
         typeof responseData === 'object' &&
-        responseData !== null &&
-        'detail' in responseData &&
-        typeof responseData.detail === 'string'
+          responseData !== null &&
+          'detail' in responseData &&
+          typeof responseData.detail === 'string'
           ? responseData.detail
           : requestError.value.message
       return
     }
-    await router.push('/')
+    await redirect()
   } finally {
     loading.value = false
   }
