@@ -81,3 +81,32 @@ class NewPassword(SQLModel):
 
 class Message(SQLModel):
     message: str
+
+
+class VenueBase(SQLModel):
+    name: str = Field(min_length=1, max_length=255)
+    capacity: int = Field(gt=1)
+    city: str = Field(min_length=1, max_length=255)
+
+
+class VenueCreate(VenueBase):
+    pass
+
+
+class VenueUpdate(SQLModel):
+    name: str | None = Field(default=None, min_length=1, max_length=255)
+    capacity: int | None = Field(default=None, gt=1)
+    city: str | None = Field(default=None, min_length=1, max_length=255)
+
+
+class Venue(VenueBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+
+
+class VenuePublic(VenueBase):
+    id: int
+
+
+class VenuesPublic(SQLModel):
+    data: list[VenuePublic]
+    count: int
