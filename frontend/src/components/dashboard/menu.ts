@@ -22,7 +22,7 @@ export const menu: MenuSection[] = [
     {
         label: 'Overview',
         items: [
-            { label: 'Dashboard', icon: 'oi oi-home', to: '/' },
+            { label: 'Dashboard', icon: 'oi oi-home', to: '/dashboard' },
         ]
     },
     {
